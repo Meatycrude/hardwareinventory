@@ -19,7 +19,7 @@ return new class extends Migration
                 'cash',
                 'mpesa',
                 'bank',
-                'card'
+                'card',
             ]);
 
             $table->foreignId('user_id')
