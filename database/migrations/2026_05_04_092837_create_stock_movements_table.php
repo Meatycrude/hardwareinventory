@@ -20,7 +20,7 @@ return new class extends Migration
                 'sale',
                 'damaged',
                 'returned',
-                'adjustment'
+                'adjustment',
             ]);
 
             $table->integer('quantity');
