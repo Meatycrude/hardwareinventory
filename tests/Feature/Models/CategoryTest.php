@@ -4,11 +4,12 @@ namespace Tests\Feature\Models;
 
 use App\Models\Category;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class CategoryTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, WithFaker;
 
     public function test_creating_a_new_category(): void
     {
@@ -28,6 +29,7 @@ class CategoryTest extends TestCase
     public function test_creating_category_from_factory(): void
     {
         $category = Category::factory()->create();
+
 
         $this->assertDatabaseHas(Category::class, [
             'name' => $category->name,
