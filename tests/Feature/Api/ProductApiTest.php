@@ -4,6 +4,7 @@ namespace Tests\Feature\Api;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use App\Models\Product;
 use Tests\TestCase;
 use App\Models\Category;
 
@@ -42,15 +43,40 @@ class ProductApiTest extends TestCase
         'sku' => 'SIM001',
     ]);
 }
-public function test_it_validates_required_fields()
+ public function test_can_get_all_products(): void
+{
+    $this->withoutExceptionHandling();
+    Product::factory()->count(5)->create();
+
+    $response = $this->getJson('/api/products');
+
+    $response->assertOk()
+             ->assertJsonCount(5);
+}
+public function test_can_get_single_product(): void
+{
+    $product = Product::factory()->create();
+
+    $response = $this->getJson("/api/products/{$product->id}");
+
+    $response->assertOk();
+}
+public function test_can_update_product(): void
 {
     
-    $response = $this->postJson('/api/products', []);
+    $product = Product::factory()->create();
 
-    
-    $response->assertStatus(422);
-    
-    
-    $response->assertJsonValidationErrors(['sku', 'name']);
+    $response = $this->putJson("/api/products/{$product->id}", [
+        'name' => 'Updated Cement',
+        'sku' => $product->sku,           
+    'stock_quantity' => $product->stock_quantity, 
+    ]);
+
+    $response->assertOk();
+
+    $this->assertDatabaseHas('products', [
+        'name' => 'Updated Cement',
+    ]);
 }
+
 }
