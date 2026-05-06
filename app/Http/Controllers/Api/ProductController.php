@@ -16,16 +16,29 @@ class ProductController extends Controller
         
         return response()->json($product, 201);
     }
-    public function val(Request $request)
+    
+public function index()
+{
+    
+    return response()->json(Product::all(), 200);
+}
+public function show(Product $product)
+{
+    
+    return response()->json($product, 200);
+}
+public function update(Request $request, Product $product)
 {
     $validated = $request->validate([
-        'sku'            => 'required|unique:products,sku',
-        'name'           => 'required|string',
+        
+        'sku' => 'required|unique:products,sku,' . $product->id,
+        'name' => 'required|string',
         'stock_quantity' => 'required|integer|min:0',
     ]);
 
-    $product = Product::create($validated);
+    $product->update($validated);
 
-    return response()->json($product, 201);
+    return response()->json($product, 200);
 }
+
 }
