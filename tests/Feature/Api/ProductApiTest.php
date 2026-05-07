@@ -78,5 +78,18 @@ public function test_can_update_product(): void
         'name' => 'Updated Cement',
     ]);
 }
+public function test_can_delete_product(): void
+{
+    $product = Product::factory()->create();
+
+    $response = $this->deleteJson("/api/products/{$product->id}");
+
+    $response->assertNoContent();
+
+    $this->assertDatabaseMissing('products', [
+        'id' => $product->id,
+    ]);
+}
+
 
 }
