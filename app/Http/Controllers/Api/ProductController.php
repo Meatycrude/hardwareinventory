@@ -40,5 +40,10 @@ public function update(Request $request, Product $product)
 
     return response()->json($product, 200);
 }
+public function destroy(Product $product)
+{
+    $product->delete();
 
+    return response()->json(null, 204);
+}
 }
