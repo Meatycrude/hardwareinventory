@@ -12,6 +12,7 @@ class StockMovementRelationshipTest extends TestCase
     use RefreshDatabase;
 
     public function test_stock_movement_belongs_to_product()
+    
     {
         $product = Product::factory()->create();
 
