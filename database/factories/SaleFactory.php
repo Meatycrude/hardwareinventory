@@ -21,7 +21,7 @@ class SaleFactory extends Factory
             'invoice_number' => $this->faker->unique()->numerify('INV-#####'),
             'total_amount' => $this->faker->numberBetween(10, 99),
             'payment_method' => $this->faker->randomElement(['cash', 'mpesa', 'bank', 'card']),
-            'user_id' => null, // You can set this to a valid user ID if needed
+            'user_id' => null, 
      
         ];
     }
