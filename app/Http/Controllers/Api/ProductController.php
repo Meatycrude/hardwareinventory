@@ -10,40 +10,42 @@ class ProductController extends Controller
 {
     public function store(Request $request)
     {
-       
+
         $product = Product::create($request->all());
 
-        
         return response()->json($product, 201);
     }
-    
-public function index()
-{
-    
-    return response()->json(Product::all(), 200);
-}
-public function show(Product $product)
-{
-    
-    return response()->json($product, 200);
-}
-public function update(Request $request, Product $product)
-{
-    $validated = $request->validate([
-        
-        'sku' => 'required|unique:products,sku,' . $product->id,
-        'name' => 'required|string',
-        'stock_quantity' => 'required|integer|min:0',
-    ]);
 
-    $product->update($validated);
+    public function index()
+    {
 
-    return response()->json($product, 200);
-}
-public function destroy(Product $product)
-{
-    $product->delete();
+        return response()->json(Product::all(), 200);
+    }
 
-    return response()->json(null, 204);
-}
+    public function show(Product $product)
+    {
+
+        return response()->json($product, 200);
+    }
+
+    public function update(Request $request, Product $product)
+    {
+        $validated = $request->validate([
+
+            'sku' => 'required|unique:products,sku,'.$product->id,
+            'name' => 'required|string',
+            'stock_quantity' => 'required|integer|min:0',
+        ]);
+
+        $product->update($validated);
+
+        return response()->json($product, 200);
+    }
+
+    public function destroy(Product $product)
+    {
+        $product->delete();
+
+        return response()->json(null, 204);
+    }
 }

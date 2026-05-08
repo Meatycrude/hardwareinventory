@@ -2,22 +2,21 @@
 
 namespace Tests\Feature;
 
-use App\Models\supplier;
+use App\Models\Supplier;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
-
 
 class SupplierTest extends TestCase
 {
     use RefreshDatabase, WithFaker;
+
     /**
      * A basic feature test example.
      */
     public function test_adding_supplier(): void
     {
-        $supplier = supplier::factory()->create();
+        $supplier = Supplier::factory()->create();
 
         $this->assertDatabaseHas('suppliers', [
             'id' => $supplier->id,
@@ -31,17 +30,17 @@ class SupplierTest extends TestCase
         $this->assertNotNull($supplier->phone);
         $this->assertNotNull($supplier->address);
 
-
     }
+
     public function test_updating_supplier(): void
     {
-        $supplier = supplier::factory()->create();
+        $supplier = Supplier::factory()->create();
 
         $supplier->update([
             'name' => 'Updated Supplier Name',
             'phone' => '1234567890',
             'email' => 'updated@example.com',
-            'address' => '123 Updated Street'
+            'address' => '123 Updated Street',
         ]);
 
         $this->assertDatabaseHas('suppliers', [
@@ -49,7 +48,7 @@ class SupplierTest extends TestCase
             'name' => 'Updated Supplier Name',
             'phone' => '1234567890',
             'email' => 'updated@example.com',
-            'address' => '123 Updated Street'
+            'address' => '123 Updated Street',
         ]);
     }
 }

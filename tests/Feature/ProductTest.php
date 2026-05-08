@@ -2,8 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Models\Category;
-use App\Models\product;
+use App\Models\Product;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -13,7 +12,7 @@ class ProductTest extends TestCase
 
     public function test_product_factory_creates_product_values(): void
     {
-        $product = product::factory()->create();
+        $product = Product::factory()->create();
 
         $this->assertDatabaseHas('products', [
             'id' => $product->id,

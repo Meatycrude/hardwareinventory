@@ -18,7 +18,7 @@ class StockServiceTest extends TestCase
             'stock_quantity' => 10,
         ]);
 
-        $service = new StockService();
+        $service = new StockService;
 
         $service->addStock(
             product: $product,
@@ -47,7 +47,7 @@ class StockServiceTest extends TestCase
             'stock_quantity' => 20,
         ]);
 
-        $service = new StockService();
+        $service = new StockService;
 
         $service->reduceStock(
             product: $product,
@@ -78,7 +78,7 @@ class StockServiceTest extends TestCase
             'stock_quantity' => 2,
         ]);
 
-        $service = new StockService();
+        $service = new StockService;
 
         $service->reduceStock(
             product: $product,
@@ -94,7 +94,7 @@ class StockServiceTest extends TestCase
             'stock_quantity' => 50,
         ]);
 
-        $service = new StockService();
+        $service = new StockService;
 
         $service->addStock(
             product: $product,
