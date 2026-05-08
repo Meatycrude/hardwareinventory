@@ -10,9 +10,7 @@ use Tests\TestCase;
 
 class ProductApiTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     */
+    
     use RefreshDatabase, WithFaker;
 
     public function test_can_create_product(): void
@@ -62,7 +60,49 @@ class ProductApiTest extends TestCase
 
         $response = $this->getJson("/api/products/{$product->id}");
 
-        $response->assertOk();
+        $response->assertOk()
+            ->assertJson([
+                'id' => $product->id,
+                'name' => $product->name,
+                'sku' => $product->sku,
+                'stock_quantity' => $product->stock_quantity,
+            ]);
+    }
+
+    public function test_validation_fails_on_update_with_invalid_data(): void
+    {
+        $product = Product::factory()->create();
+
+        $response = $this->putJson("/api/products/{$product->id}", [
+            'name' => '',
+            'sku' => '',
+            'stock_quantity' => -5,
+        ]);
+
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors(['sku', 'name', 'stock_quantity']);
+    }
+
+    public function test_unique_sku_validation_on_update(): void
+    {
+        $product = Product::factory()->create();
+        $otherProduct = Product::factory()->create();
+
+        $response = $this->putJson("/api/products/{$product->id}", [
+            'name' => $product->name,
+            'sku' => $otherProduct->sku,
+            'stock_quantity' => $product->stock_quantity,
+        ]);
+
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors(['sku']);
+    }
+
+    public function test_returns_404_for_nonexistent_product(): void
+    {
+        $response = $this->getJson('/api/products/999');
+
+        $response->assertStatus(404);
     }
 
     public function test_can_update_product(): void
