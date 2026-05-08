@@ -62,12 +62,4 @@ class SaleApiTest extends TestCase
 
         $response->assertOk();
     }
-    public function test_can_get_all_sale():void
-    {
-        Sale:factory()->count(3)
-
-
-
-
-    }
 }
