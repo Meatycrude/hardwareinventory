@@ -2,13 +2,13 @@
 
 namespace Database\Factories;
 
-use App\Models\stockmovement;
+use App\Models\StockMovement;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<stockmovement>
+ * @extends Factory<StockMovement>
  */
-class StockmovementFactory extends Factory
+class StockMovementFactory extends Factory
 {
     /**
      * Define the model's default state.

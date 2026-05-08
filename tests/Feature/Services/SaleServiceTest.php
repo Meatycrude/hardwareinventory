@@ -4,8 +4,6 @@ namespace Tests\Feature\Services;
 
 use App\Models\Product;
 use App\Models\Sale;
-use App\Models\SaleItem;
-use App\Models\StockMovement;
 use App\Services\SaleService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -21,7 +19,7 @@ class SaleServiceTest extends TestCase
             'stock_quantity' => 20,
         ]);
 
-        $service = new Saleservice();
+        $service = new SaleService;
 
         $sale = $service->createSale([
             'payment_method' => 'cash',
@@ -30,8 +28,8 @@ class SaleServiceTest extends TestCase
                 [
                     'product_id' => $product->id,
                     'quantity' => 2,
-                ]
-            ]
+                ],
+            ],
         ]);
 
         $this->assertInstanceOf(
@@ -61,7 +59,7 @@ class SaleServiceTest extends TestCase
             'stock_quantity' => 10,
         ]);
 
-        $service = new SaleService();
+        $service = new SaleService;
 
         $service->createSale([
             'payment_method' => 'cash',
@@ -70,8 +68,8 @@ class SaleServiceTest extends TestCase
                 [
                     'product_id' => $product->id,
                     'quantity' => 3,
-                ]
-            ]
+                ],
+            ],
         ]);
 
         $this->assertDatabaseHas('products', [
@@ -87,7 +85,7 @@ class SaleServiceTest extends TestCase
             'stock_quantity' => 10,
         ]);
 
-        $service = new SaleService();
+        $service = new SaleService;
 
         $service->createSale([
             'payment_method' => 'cash',
@@ -96,8 +94,8 @@ class SaleServiceTest extends TestCase
                 [
                     'product_id' => $product->id,
                     'quantity' => 2,
-                ]
-            ]
+                ],
+            ],
         ]);
 
         $this->assertDatabaseHas('stock_movements', [
@@ -116,7 +114,7 @@ class SaleServiceTest extends TestCase
             'stock_quantity' => 1,
         ]);
 
-        $service = new SaleService();
+        $service = new SaleService;
 
         $service->createSale([
             'payment_method' => 'cash',
@@ -125,38 +123,40 @@ class SaleServiceTest extends TestCase
                 [
                     'product_id' => $product->id,
                     'quantity' => 5,
-                ]
-            ]
+                ],
+            ],
         ]);
     }
+
     public function test_sale_requires_items(): void
-{
-    $response = $this->postJson('/api/sales', [
-        'payment_method' => 'cash',
-        'items' => [],
-    ]);
+    {
+        $response = $this->postJson('/api/sales', [
+            'payment_method' => 'cash',
+            'items' => [],
+        ]);
 
-    $response->assertUnprocessable();
-}
-public function test_api_cannot_sell_more_than_available_stock(): void
-{
-    $product = Product::factory()->create([
-        'stock_quantity' => 1,
-        'selling_price' => 100,
-    ]);
+        $response->assertUnprocessable();
+    }
 
-    $response = $this->postJson('/api/sales', [
+    public function test_api_cannot_sell_more_than_available_stock(): void
+    {
+        $product = Product::factory()->create([
+            'stock_quantity' => 1,
+            'selling_price' => 100,
+        ]);
 
-        'payment_method' => 'cash',
+        $response = $this->postJson('/api/sales', [
 
-        'items' => [
-            [
-                'product_id' => $product->id,
-                'quantity' => 5,
-            ]
-        ]
-    ]);
+            'payment_method' => 'cash',
 
-    $response->assertStatus(422);
-}
+            'items' => [
+                [
+                    'product_id' => $product->id,
+                    'quantity' => 5,
+                ],
+            ],
+        ]);
+
+        $response->assertStatus(422);
+    }
 }

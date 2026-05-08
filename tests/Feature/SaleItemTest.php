@@ -2,11 +2,11 @@
 
 namespace Tests\Feature;
 
+use App\Models\Product;
+use App\Models\Sale;
+use App\Models\SaleItem;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
-use App\Models\SaleItem;
-use App\Models\product;
-use App\Models\sale;
 
 class SaleItemTest extends TestCase
 {
@@ -14,8 +14,8 @@ class SaleItemTest extends TestCase
 
     public function test_create_sale_item(): void
     {
-        $sale = sale::factory()->create();
-        $product = product::factory()->create();
+        $sale = Sale::factory()->create();
+        $product = Product::factory()->create();
 
         $item = SaleItem::factory()->create([
             'sale_id' => $sale->id,
@@ -40,8 +40,8 @@ class SaleItemTest extends TestCase
 
     public function test_update_sale_item(): void
     {
-        $sale = sale::factory()->create();
-        $product = product::factory()->create();
+        $sale = Sale::factory()->create();
+        $product = Product::factory()->create();
 
         $item = SaleItem::factory()->create([
             'sale_id' => $sale->id,

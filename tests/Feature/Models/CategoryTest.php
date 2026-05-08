@@ -30,7 +30,6 @@ class CategoryTest extends TestCase
     {
         $category = Category::factory()->create();
 
-
         $this->assertDatabaseHas(Category::class, [
             'name' => $category->name,
             'slug' => $category->slug,
