@@ -11,9 +11,6 @@ class SaleTest extends TestCase
 {
     use RefreshDatabase, WithFaker;
 
-    /**
-     * A basic feature test example.
-     */
     public function test_create_sale(): void
     {
         $sale = Sale::factory()->create();
