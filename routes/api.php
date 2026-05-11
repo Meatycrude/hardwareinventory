@@ -6,6 +6,9 @@ use App\Http\Controllers\Api\SaleController;
 use App\Http\Controllers\Api\SupplierController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\StockMovementController;
+use App\Http\Controllers\Api\DashboardController;
+
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -42,3 +45,11 @@ Route::get('/suppliers/{supplier}', [SupplierController::class, 'show']);
 Route::put('/suppliers/{supplier}', [SupplierController::class, 'update']);
 
 Route::delete('/suppliers/{supplier}', [SupplierController::class, 'destroy']);
+
+Route::get('/stock-movements', [StockMovementController::class, 'index']);
+
+Route::get('/products/{product}/movements', [StockMovementController::class, 'productMovements']);
+
+Route::get('/dashboard/stats', [DashboardController::class, 'index']);
+
+

@@ -19,7 +19,7 @@ class StockMovementFactory extends Factory
     {
         return [
             'id' => $this->faker->randomNumber(),
-            'product_id' => $this->faker->randomNumber(),
+            'product_id' => \App\Models\Product::factory(), 
             'type' => $this->faker->randomElement(['purchase', 'sale', 'damaged', 'returned', 'adjustment']),
             'quantity' => $this->faker->randomNumber(),
             'reference' => $this->faker->word(),

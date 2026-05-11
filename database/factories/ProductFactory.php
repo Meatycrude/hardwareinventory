@@ -22,7 +22,7 @@ class ProductFactory extends Factory
     {
         return [
             'category_id' => Category::factory(),
-            'supplier_id' => null,
+            'supplier_id' => \App\Models\Supplier::factory(),
             'name' => $this->faker->words(3, true),
             'sku' => $this->faker->unique()->bothify('SKU-####'),
             'brand' => $this->faker->company(),

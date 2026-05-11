@@ -18,8 +18,10 @@ class ProductController extends Controller
 
     public function index()
     {
+        $products = Product::all();
+        $products->load(['category', 'supplier']);
 
-        return response()->json(Product::all(), 200);
+        return response()->json($products, 200);
     }
 
     public function show(Product $product)

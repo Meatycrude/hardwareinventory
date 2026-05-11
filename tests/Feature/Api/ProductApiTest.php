@@ -135,4 +135,30 @@ class ProductApiTest extends TestCase
             'id' => $product->id,
         ]);
     }
+    /*public function test_can_get_product_details_with_relationships()
+{
+    
+    $product = Product::factory()->create();
+
+    $product->load(['category', 'supplier']); 
+
+    
+    $response = $this->getJson("/api/products/{$product->id}");
+
+    
+    $response->assertOk()
+             ->assertJson([
+                 'data' => [ 
+                     'id' => $product->id,
+                     'sku' => $product->sku,
+                     'category' => [
+                         'id' => $product->category->id,
+                     ],
+                     'supplier' => [
+                         'id' => $product->supplier->id,
+                     ],
+                 ]
+             ]);
+}*/
+
 }
