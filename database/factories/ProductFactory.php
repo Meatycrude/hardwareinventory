@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Category;
 use App\Models\product;
+use App\Models\Supplier;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -22,7 +23,7 @@ class ProductFactory extends Factory
     {
         return [
             'category_id' => Category::factory(),
-            'supplier_id' => \App\Models\Supplier::factory(),
+            'supplier_id' => Supplier::factory(),
             'name' => $this->faker->words(3, true),
             'sku' => $this->faker->unique()->bothify('SKU-####'),
             'brand' => $this->faker->company(),
