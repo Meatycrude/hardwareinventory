@@ -10,7 +10,6 @@ use Tests\TestCase;
 
 class ProductApiTest extends TestCase
 {
-    
     use RefreshDatabase, WithFaker;
 
     public function test_can_create_product(): void
@@ -137,18 +136,18 @@ class ProductApiTest extends TestCase
     }
     /*public function test_can_get_product_details_with_relationships()
 {
-    
+
     $product = Product::factory()->create();
 
-    $product->load(['category', 'supplier']); 
+    $product->load(['category', 'supplier']);
 
-    
+
     $response = $this->getJson("/api/products/{$product->id}");
 
-    
+
     $response->assertOk()
              ->assertJson([
-                 'data' => [ 
+                 'data' => [
                      'id' => $product->id,
                      'sku' => $product->sku,
                      'category' => [

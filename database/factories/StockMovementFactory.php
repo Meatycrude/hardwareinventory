@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Product;
 use App\Models\StockMovement;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -19,7 +20,7 @@ class StockMovementFactory extends Factory
     {
         return [
             'id' => $this->faker->randomNumber(),
-            'product_id' => \App\Models\Product::factory(), 
+            'product_id' => Product::factory(),
             'type' => $this->faker->randomElement(['purchase', 'sale', 'damaged', 'returned', 'adjustment']),
             'quantity' => $this->faker->randomNumber(),
             'reference' => $this->faker->word(),

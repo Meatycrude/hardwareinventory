@@ -89,8 +89,8 @@ class SupplierApiTest extends TestCase
         $response = $this->postJson('/api/suppliers', [
             'name' => '',
             'email' => 'invalid-email',
-            'phone' => str_repeat('1', 21), 
-            'address' => $this->faker->text(1000), 
+            'phone' => str_repeat('1', 21),
+            'address' => $this->faker->text(1000),
         ]);
 
         $response->assertStatus(422)
@@ -150,7 +150,7 @@ class SupplierApiTest extends TestCase
         $response->assertStatus(200)
             ->assertJson([
                 'name' => 'Partially Updated Name',
-                'email' => $supplier->email, 
+                'email' => $supplier->email,
             ]);
 
         $this->assertDatabaseHas('suppliers', [
