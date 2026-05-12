@@ -2,7 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Models\Product;
 use App\Models\Sale;
+use App\Models\SaleItem;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -63,43 +65,44 @@ class SaleTest extends TestCase
         $this->assertGreaterThan(0, $sale->total_amount);
         $this->assertContains($sale->payment_method, ['cash', 'mpesa', 'bank', 'card']);
     }
+
     public function test_can_get_sale_with_items(): void
-{
-    $sale = \App\Models\Sale::factory()->create();
+    {
+        $sale = Sale::factory()->create();
 
-    $product = \App\Models\Product::factory()->create();
+        $product = Product::factory()->create();
 
-    \App\Models\SaleItem::factory()->create([
-        'sale_id' => $sale->id,
-        'product_id' => $product->id,
-        'quantity' => 2,
-    ]);
+        SaleItem::factory()->create([
+            'sale_id' => $sale->id,
+            'product_id' => $product->id,
+            'quantity' => 2,
+        ]);
 
-    $response = $this->getJson(
-        "/api/sales/{$sale->id}"
-    );
+        $response = $this->getJson(
+            "/api/sales/{$sale->id}"
+        );
 
-    $response->assertOk();
+        $response->assertOk();
 
-    $response->assertJsonStructure([
-        'id',
-        'invoice_number',
-        'total_amount',
+        $response->assertJsonStructure([
+            'id',
+            'invoice_number',
+            'total_amount',
 
-        'items' => [
-            [
-                'id',
-                'quantity',
-                'unit_price',
-                'subtotal',
-
-                'product' => [
+            'items' => [
+                [
                     'id',
-                    'name',
-                    'sku',
-                ]
-            ]
-        ]
-    ]);
-}
+                    'quantity',
+                    'unit_price',
+                    'subtotal',
+
+                    'product' => [
+                        'id',
+                        'name',
+                        'sku',
+                    ],
+                ],
+            ],
+        ]);
+    }
 }
