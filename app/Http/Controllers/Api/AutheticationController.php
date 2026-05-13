@@ -29,6 +29,7 @@ class AutheticationController extends Controller
                 'access_token' => $accessToken->plainTextToken,
                 'token_type' => 'Bearer',
                 'expires_at' => $accessToken->accessToken->expires_at?->toIso8601String(CarbonInterface::DIFF_ABSOLUTE),
+                'user' => $user
             ]);
         }
 
