@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Product;
 use App\Models\Sale;
+use App\Models\StockMovement;
 use Illuminate\Support\Facades\DB;
 
 class SaleService
@@ -26,7 +27,7 @@ class SaleService
                 $product = Product::findOrFail($item['product_id']);
 
                 if ($product->stock_quantity < $item['quantity']) {
-                    throw new \Exception('Insufficient stock');
+                    throw new \Exception("Insufficient stock for product: {$product->name}");
                 }
 
                 $subtotal = $product->selling_price * $item['quantity'];
@@ -41,15 +42,16 @@ class SaleService
 
                 $product->decrement('stock_quantity', $item['quantity']);
 
-                $product->stockMovements()->create([
-                    'type' => 'sale',
-                    'quantity' => -$item['quantity'],
-                ]);
+                $movement = new StockMovement;
+                $movement->product_id = $product->id;
+                $movement->quantity = -$item['quantity'];
+                $movement->movement_type = 'sale';
+                $movement->save();
             }
 
             $sale->update(['total_amount' => $totalAmount]);
 
-            return $sale;
+            return $sale->load('items.product');
         });
     }
 }
