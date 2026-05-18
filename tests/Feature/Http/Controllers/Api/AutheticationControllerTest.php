@@ -30,4 +30,27 @@ class AutheticationControllerTest extends TestCase
 
         $response->assertJson(fn (AssertableJson $assertableJson) => $assertableJson->has('access_token')->etc());
     }
+
+    public function test_api_logout_route(): void
+    {
+        // Arrange
+        $user = User::factory()->create();
+
+        $payload = [
+            'email' => $user->email,
+            'password' => 'password',
+        ];
+
+        $loginResponse = $this->postJson(route('api.login'), $payload);
+
+        $token = $loginResponse->json('access_token');
+
+        // Act
+
+        $response = $this->withHeader('Authorization', "Bearer {$token}")->postJson(route('api.logout'));
+
+        // Assertion
+
+        $response->assertStatus(204);
+    }
 }
