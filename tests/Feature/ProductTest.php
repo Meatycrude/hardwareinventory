@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Sale;
 use App\Models\Supplier;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -119,7 +120,7 @@ class ProductTest extends TestCase
     {
         $product = Product::factory()->create();
 
-        $sale = \App\Models\Sale::factory()->create();
+        $sale = Sale::factory()->create();
 
         $product->saleItems()->createMany([
             [
