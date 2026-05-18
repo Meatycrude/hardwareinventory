@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\SaleController;
 use App\Http\Controllers\Api\StockMovementController;
 use App\Http\Controllers\Api\SupplierController;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,9 +15,9 @@ Route::name('api.')->group(function () {
 
     Route::post('/login', [AutheticationController::class, 'store'])->name('login');
 
-    Route::get('/user', function (Request $request) {
-        return $request->user();
-    })->middleware('auth:sanctum');
+    Route::post('/logout', [AutheticationController::class, 'destroy'])->name('logout')->middleware('auth:sanctum');
+
+    Route::get('/user', fn (Request $request) => new UserResource($request->user()))->middleware('auth:sanctum');
 
     Route::post('/products', [ProductController::class, 'store']);
 
@@ -25,6 +26,9 @@ Route::name('api.')->group(function () {
     Route::get('/products/{product}', [ProductController::class, 'show']);
 
     Route::put('/products/{product}', [ProductController::class, 'update']);
+
+    Route::post('/products/{product}/restock', [App\Http\Controllers\Api\ProductController::class, 'restock']);
+
 
     Route::delete('/products/{product}', [ProductController::class, 'destroy']);
 
@@ -54,5 +58,5 @@ Route::name('api.')->group(function () {
 
     Route::get('/products/{product}/movements', [StockMovementController::class, 'productMovements']);
 
-    Route::get('/dashboard/stats', [DashboardController::class, 'index']);
+    Route::get('/dashboard', [DashboardController::class, 'index']);
 });
