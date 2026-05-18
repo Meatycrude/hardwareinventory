@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Models\User;
 use Carbon\CarbonInterface;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AutheticationController extends Controller
@@ -29,10 +30,22 @@ class AutheticationController extends Controller
                 'access_token' => $accessToken->plainTextToken,
                 'token_type' => 'Bearer',
                 'expires_at' => $accessToken->accessToken->expires_at?->toIso8601String(CarbonInterface::DIFF_ABSOLUTE),
-                'user' => $user
+                'user' => $user,
             ]);
         }
 
         return response()->json(['message' => 'Invalid credentials'], 401);
+    }
+
+    public function destroy(Request $request)
+    {
+        /**
+         * @var User
+         */
+        $user = $request->user();
+
+        $user->tokens()->delete();
+
+        return response()->noContent();
     }
 }
