@@ -29,7 +29,6 @@ Route::name('api.')->group(function () {
 
     Route::post('/products/{product}/restock', [App\Http\Controllers\Api\ProductController::class, 'restock']);
 
-
     Route::delete('/products/{product}', [ProductController::class, 'destroy']);
 
     Route::post('/sales', [SaleController::class, 'store']);
