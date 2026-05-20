@@ -13,7 +13,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::name('api.')->group(function () {
 
-    Route::post('/login', [AutheticationController::class, 'store'])->name('login');
+    Route::post('/login', [AutheticationController::class, 'login'])->name('login');
+
+    Route::post('/verify-2fa', [AutheticationController::class, 'verifyTwoFactor'])->name('verify-2fa');
 
     Route::post('/logout', [AutheticationController::class, 'destroy'])->name('logout')->middleware('auth:sanctum');
 
@@ -58,4 +60,6 @@ Route::name('api.')->group(function () {
     Route::get('/products/{product}/movements', [StockMovementController::class, 'productMovements']);
 
     Route::get('/dashboard', [DashboardController::class, 'index']);
+
+    
 });
