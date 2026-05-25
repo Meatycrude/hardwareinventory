@@ -104,7 +104,13 @@ class AutheticationController extends Controller
         /** @var User $user */
         $user = $request->user();
 
-        $user->currentAccessToken()?->delete();
+        // For database tokens, delete the token record
+        if ($user->currentAccessToken() && method_exists($user->currentAccessToken(), 'delete')) {
+            $user->currentAccessToken()->delete();
+        } else {
+            // For stateless tokens, revoke all tokens for this user
+            $user->tokens()->delete();
+        }
 
         return response()->noContent();
     }
