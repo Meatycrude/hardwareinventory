@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-       Schema::table('users', function (Blueprint $table) {
-    $table->string('two_factor_code')->nullable();
-    $table->timestamp('two_factor_expires_at')->nullable();
-});
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('two_factor_code')->nullable();
+            $table->timestamp('two_factor_expires_at')->nullable();
+        });
     }
 
     /**
