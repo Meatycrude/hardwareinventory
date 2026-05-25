@@ -8,6 +8,8 @@ use App\Http\Controllers\Api\SaleController;
 use App\Http\Controllers\Api\StockMovementController;
 use App\Http\Controllers\Api\SupplierController;
 use App\Http\Resources\UserResource;
+use App\Http\Controllers\Api\ProfileController;
+use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -60,5 +62,13 @@ Route::name('api.')->group(function () {
     Route::get('/products/{product}/movements', [StockMovementController::class, 'productMovements']);
 
     Route::get('/dashboard', [DashboardController::class, 'index']);
+
+    Route::get('/profile', [ProfileController::class, 'show'])->middleware('auth:sanctum');
+
+    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->middleware('auth:sanctum');
+
+    Route::get('/users', [UserController::class, 'index'])->middleware('auth:sanctum');
+
+    Route::post('/users', [UserController::class, 'store'])->middleware('auth:sanctum');
 
 });
