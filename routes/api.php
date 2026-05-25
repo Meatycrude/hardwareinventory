@@ -29,7 +29,7 @@ Route::name('api.')->group(function () {
 
     Route::put('/products/{product}', [ProductController::class, 'update']);
 
-    Route::post('/products/{product}/restock', [App\Http\Controllers\Api\ProductController::class, 'restock']);
+    Route::post('/products/{product}/restock', [ProductController::class, 'restock']);
 
     Route::delete('/products/{product}', [ProductController::class, 'destroy']);
 
@@ -61,5 +61,4 @@ Route::name('api.')->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index']);
 
-    
 });
