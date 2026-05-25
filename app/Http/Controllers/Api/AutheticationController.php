@@ -8,6 +8,8 @@ use App\Models\User;
 use Carbon\CarbonInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\TwoFactorCodeMail;
 
 class AutheticationController extends Controller
 {
@@ -31,7 +33,7 @@ class AutheticationController extends Controller
             'two_factor_expires_at' => now()->addMinutes(10),
         ]);
 
-        logger("2FA code for {$user->email}: {$code}");
+        Mail::to($user->email)->send(new TwoFactorCodeMail($code));
 
         return response()->json([
             'requires_2fa' => true,
