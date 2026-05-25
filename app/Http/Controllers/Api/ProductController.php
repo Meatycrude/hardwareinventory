@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\StockMovement;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class ProductController extends Controller
@@ -70,30 +72,28 @@ class ProductController extends Controller
     }
 
     public function restock(Request $request, Product $product)
-{
-    $validated = $request->validate([
-        'quantity' => 'required|integer|min:1',
-        'buying_price' => 'required|numeric|min:0',
-    ]);
-
-    
-    return \Illuminate\Support\Facades\DB::transaction(function () use ($validated, $product) {
-        
-        $product->increment('stock_quantity', $validated['quantity']);
-        $product->update([
-            'buying_price' => $validated['buying_price']
+    {
+        $validated = $request->validate([
+            'quantity' => 'required|integer|min:1',
+            'buying_price' => 'required|numeric|min:0',
         ]);
 
-        $movement = new \App\Models\StockMovement();
-        $movement->product_id    = $product->id;
-        $movement->quantity      = $validated['quantity'];
-        $movement->movement_type = 'purchase';
-        $movement->save();
+        return DB::transaction(function () use ($validated, $product) {
 
-        $product->load(['category', 'supplier']);
+            $product->increment('stock_quantity', $validated['quantity']);
+            $product->update([
+                'buying_price' => $validated['buying_price'],
+            ]);
 
-        return response()->json($product, 200);
-    });
-}
+            $movement = new StockMovement;
+            $movement->product_id = $product->id;
+            $movement->quantity = $validated['quantity'];
+            $movement->movement_type = 'purchase';
+            $movement->save();
 
+            $product->load(['category', 'supplier']);
+
+            return response()->json($product, 200);
+        });
+    }
 }
