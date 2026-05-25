@@ -88,7 +88,7 @@ class ProductController extends Controller
             $movement = new StockMovement;
             $movement->product_id = $product->id;
             $movement->quantity = $validated['quantity'];
-            $movement->movement_type = 'purchase';
+            $movement->type = 'purchase';
             $movement->save();
 
             $product->load(['category', 'supplier']);
