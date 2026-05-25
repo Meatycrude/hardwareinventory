@@ -45,7 +45,7 @@ class SaleService
                 $movement = new StockMovement;
                 $movement->product_id = $product->id;
                 $movement->quantity = -$item['quantity'];
-                $movement->movement_type = 'sale';
+                $movement->type = 'sale';
                 $movement->save();
             }
 

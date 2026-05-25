@@ -5,6 +5,7 @@ namespace Tests\Feature\Http\Controllers\Api;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\TestCase;
 
@@ -15,6 +16,7 @@ class AutheticationControllerTest extends TestCase
     public function test_api_login_route(): void
     {
         // Arrange
+        Mail::fake();
         $user = User::factory()->create();
 
         $payload = [
@@ -26,14 +28,18 @@ class AutheticationControllerTest extends TestCase
 
         $response = $this->postJson(route('api.login'), $payload);
 
-        // Assertion
-
-        $response->assertJson(fn (AssertableJson $assertableJson) => $assertableJson->has('access_token')->etc());
+        // Assertion - Login should return requires_2fa
+        $response->assertJson(fn (AssertableJson $assertableJson) => $assertableJson
+            ->has('requires_2fa')
+            ->where('requires_2fa', true)
+            ->etc()
+        );
     }
 
     public function test_api_logout_route(): void
     {
         // Arrange
+        Mail::fake();
         $user = User::factory()->create();
 
         $payload = [
@@ -43,7 +49,15 @@ class AutheticationControllerTest extends TestCase
 
         $loginResponse = $this->postJson(route('api.login'), $payload);
 
-        $token = $loginResponse->json('access_token');
+        // Get the 2FA code and verify
+        $code = $user->fresh()->two_factor_code;
+
+        $verifyResponse = $this->postJson(route('api.verify-2fa'), [
+            'email' => $user->email,
+            'code' => $code,
+        ]);
+
+        $token = $verifyResponse->json('access_token');
 
         // Act
 
