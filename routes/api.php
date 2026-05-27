@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\SaleController;
 use App\Http\Controllers\Api\StockMovementController;
 use App\Http\Controllers\Api\SupplierController;
+use App\Http\Controllers\Api\MpesaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -55,4 +56,8 @@ Route::name('api.')->group(function () {
     Route::get('/products/{product}/movements', [StockMovementController::class, 'productMovements']);
 
     Route::get('/dashboard/stats', [DashboardController::class, 'index']);
+
+    Route::get('/mpesa/token', [MpesaController::class, 'token']);
+
+    
 });
