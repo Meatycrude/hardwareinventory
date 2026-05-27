@@ -4,7 +4,6 @@ namespace Tests\Feature\Api;
 
 use App\Models\Category;
 use App\Models\Product;
-use App\Models\Supplier;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -17,14 +16,14 @@ class ProductApiTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $category = Category::factory()->create();
-        $supplier = Supplier::factory()->create();
 
         $response = $this->postJson('/api/products', [
 
             'category_id' => $category->id,
-            'supplier_id' => $supplier->id,
 
             'name' => 'Simba Cement',
+
+            'sku' => 'SIM001',
 
             'unit' => 'Bag',
 
@@ -33,14 +32,13 @@ class ProductApiTest extends TestCase
             'selling_price' => 720,
 
             'stock_quantity' => 50,
-            'minimum_stock' => 10,
 
         ]);
 
         $response->assertCreated();
 
         $this->assertDatabaseHas('products', [
-            'name' => 'Simba Cement',
+            'sku' => 'SIM001',
         ]);
     }
 

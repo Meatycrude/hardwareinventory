@@ -20,7 +20,6 @@ class SaleApiTest extends TestCase
         $product = Product::factory()->create([
             'selling_price' => 100,
             'stock_quantity' => 20,
-            'minimum_stock' => 5,
         ]);
 
         $response = $this->postJson('/api/sales', [

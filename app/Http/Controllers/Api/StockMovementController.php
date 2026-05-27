@@ -4,9 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\StockMovement;
-use Illuminate\Database\Eloquent\Attributes\Fillable;
-
-#[Fillable('product_id', 'type', 'quantity')]
 
 class StockMovementController extends Controller
 {
