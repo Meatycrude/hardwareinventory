@@ -3,14 +3,14 @@
 use App\Http\Controllers\Api\AutheticationController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\DashboardController;
+use App\Http\Controllers\Api\MpesaController;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\SaleController;
 use App\Http\Controllers\Api\StockMovementController;
 use App\Http\Controllers\Api\SupplierController;
-use App\Http\Resources\UserResource;
-use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\Api\MpesaController;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -74,5 +74,4 @@ Route::name('api.')->group(function () {
 
     Route::get('/mpesa/token', [MpesaController::class, 'token']);
 
-    
 });
