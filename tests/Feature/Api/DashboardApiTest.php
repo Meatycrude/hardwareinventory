@@ -34,7 +34,7 @@ class DashboardApiTest extends TestCase
         ]);
 
         $response = $this->getJson(
-            '/api/dashboard/stats'
+            '/api/dashboard'
         );
 
         $response->assertOk();
