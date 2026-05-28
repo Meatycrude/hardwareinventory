@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\SupplierController;
 use App\Http\Resources\UserResource;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\MpesaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -71,4 +72,7 @@ Route::name('api.')->group(function () {
 
     Route::post('/users', [UserController::class, 'store'])->middleware('auth:sanctum');
 
+    Route::get('/mpesa/token', [MpesaController::class, 'token']);
+
+    
 });
