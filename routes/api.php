@@ -41,6 +41,8 @@ Route::name('api.')->group(function () {
     Route::get('/sales', [SaleController::class, 'index']);
 
     Route::get('/sales/{sale}', [SaleController::class, 'show']);
+    
+    Route::get('/sales/{sale}/receipt', [SaleController::class, 'receipt']);
 
     Route::post('/categories', [CategoryController::class, 'store']);
 

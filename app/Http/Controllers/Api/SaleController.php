@@ -43,4 +43,33 @@ class SaleController extends Controller
 
         return response()->json($sale->load('items.product'), 200);
     }
+    public function receipt(Sale $sale)
+{
+    $sale->load('items.product');
+
+    return response()->json([
+        'business' => [
+            'name' => 'Kaura Hardware',
+            'address' => '  Busia, Kenya',
+            'phone' => '+254 715 698 160',
+        ],
+
+        'receipt' => [
+            'invoice_number' => $sale->invoice_number,
+            'payment_method' => $sale->payment_method,
+            'total_amount' => $sale->total_amount,
+            'date' => $sale->created_at->format('d M Y, h:i A'),
+
+            'items' => $sale->items->map(function ($item) {
+                return [
+                    'product_name' => $item->product->name,
+                    'sku' => $item->product->sku,
+                    'quantity' => $item->quantity,
+                    'unit_price' => $item->unit_price,
+                    'subtotal' => $item->subtotal,
+                ];
+            })->values(),
+        ],
+    ]);
+}
 }
