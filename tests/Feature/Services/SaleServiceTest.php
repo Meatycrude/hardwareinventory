@@ -4,6 +4,7 @@ namespace Tests\Feature\Services;
 
 use App\Models\Product;
 use App\Models\Sale;
+use App\Models\User;
 use App\Services\SaleService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -23,7 +24,6 @@ class SaleServiceTest extends TestCase
 
         $sale = $service->createSale([
             'payment_method' => 'cash',
-
             'items' => [
                 [
                     'product_id' => $product->id,
@@ -32,10 +32,7 @@ class SaleServiceTest extends TestCase
             ],
         ]);
 
-        $this->assertInstanceOf(
-            Sale::class,
-            $sale
-        );
+        $this->assertInstanceOf(Sale::class, $sale);
 
         $this->assertDatabaseHas('sales', [
             'id' => $sale->id,
@@ -63,7 +60,6 @@ class SaleServiceTest extends TestCase
 
         $service->createSale([
             'payment_method' => 'cash',
-
             'items' => [
                 [
                     'product_id' => $product->id,
@@ -89,7 +85,6 @@ class SaleServiceTest extends TestCase
 
         $service->createSale([
             'payment_method' => 'cash',
-
             'items' => [
                 [
                     'product_id' => $product->id,
@@ -118,7 +113,6 @@ class SaleServiceTest extends TestCase
 
         $service->createSale([
             'payment_method' => 'cash',
-
             'items' => [
                 [
                     'product_id' => $product->id,
@@ -130,32 +124,42 @@ class SaleServiceTest extends TestCase
 
     public function test_sale_requires_items(): void
     {
-        $response = $this->postJson('/api/sales', [
-            'payment_method' => 'cash',
-            'items' => [],
+        $cashier = User::factory()->create([
+            'role' => 'cashier',
         ]);
+
+        $response = $this
+            ->actingAs($cashier, 'sanctum')
+            ->postJson('/api/sales', [
+                'payment_method' => 'cash',
+                'items' => [],
+            ]);
 
         $response->assertUnprocessable();
     }
 
     public function test_api_cannot_sell_more_than_available_stock(): void
     {
+        $cashier = User::factory()->create([
+            'role' => 'cashier',
+        ]);
+
         $product = Product::factory()->create([
             'stock_quantity' => 1,
             'selling_price' => 100,
         ]);
 
-        $response = $this->postJson('/api/sales', [
-
-            'payment_method' => 'cash',
-
-            'items' => [
-                [
-                    'product_id' => $product->id,
-                    'quantity' => 5,
+        $response = $this
+            ->actingAs($cashier, 'sanctum')
+            ->postJson('/api/sales', [
+                'payment_method' => 'cash',
+                'items' => [
+                    [
+                        'product_id' => $product->id,
+                        'quantity' => 5,
+                    ],
                 ],
-            ],
-        ]);
+            ]);
 
         $response->assertStatus(422);
     }

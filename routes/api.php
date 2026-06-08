@@ -16,13 +16,18 @@ use Illuminate\Support\Facades\Route;
 
 Route::name('api.')->group(function () {
 
-    Route::post('/login', [AutheticationController::class, 'login'])->name('login');
+    Route::post('/login', [AutheticationController::class, 'login'])
+        ->name('login');
 
-    Route::post('/verify-2fa', [AutheticationController::class, 'verifyTwoFactor'])->name('verify-2fa');
+    Route::post('/verify-2fa', [AutheticationController::class, 'verifyTwoFactor'])
+        ->name('verify-2fa');
 
-    Route::post('/logout', [AutheticationController::class, 'destroy'])->name('logout')->middleware('auth:sanctum');
+    Route::post('/logout', [AutheticationController::class, 'destroy'])
+        ->name('logout')
+        ->middleware('auth:sanctum');
 
-    Route::get('/user', fn (Request $request) => new UserResource($request->user()))->middleware('auth:sanctum');
+    Route::get('/user', fn (Request $request) => new UserResource($request->user()))
+        ->middleware('auth:sanctum');
 
     Route::post('/products', [ProductController::class, 'store']);
 
@@ -32,16 +37,18 @@ Route::name('api.')->group(function () {
 
     Route::put('/products/{product}', [ProductController::class, 'update']);
 
-    Route::post('/products/{product}/restock', [ProductController::class, 'restock']);
+    Route::post('/products/{product}/restock', [ProductController::class, 'restock'])
+    ->middleware(['auth:sanctum', 'role:admin,storekeeper']);
 
     Route::delete('/products/{product}', [ProductController::class, 'destroy']);
 
-    Route::post('/sales', [SaleController::class, 'store']);
+    Route::post('/sales', [SaleController::class, 'store'])
+    ->middleware(['auth:sanctum', 'role:admin,cashier']);
 
     Route::get('/sales', [SaleController::class, 'index']);
 
     Route::get('/sales/{sale}', [SaleController::class, 'show']);
-    
+
     Route::get('/sales/{sale}/receipt', [SaleController::class, 'receipt']);
 
     Route::post('/categories', [CategoryController::class, 'store']);
@@ -60,20 +67,24 @@ Route::name('api.')->group(function () {
 
     Route::delete('/suppliers/{supplier}', [SupplierController::class, 'destroy']);
 
-    Route::get('/stock-movements', [StockMovementController::class, 'index']);
+    Route::get('/stock-movements', [StockMovementController::class, 'index'])
+    ->middleware(['auth:sanctum', 'role:admin,storekeeper']);
 
     Route::get('/products/{product}/movements', [StockMovementController::class, 'productMovements']);
 
     Route::get('/dashboard', [DashboardController::class, 'index']);
 
-    Route::get('/profile', [ProfileController::class, 'show'])->middleware('auth:sanctum');
+    Route::get('/profile', [ProfileController::class, 'show'])
+        ->middleware('auth:sanctum');
 
-    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->middleware('auth:sanctum');
+    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])
+        ->middleware('auth:sanctum');
 
-    Route::get('/users', [UserController::class, 'index'])->middleware('auth:sanctum');
+    Route::get('/users', [UserController::class, 'index'])
+        ->middleware(['auth:sanctum', 'role:admin']);
 
-    Route::post('/users', [UserController::class, 'store'])->middleware('auth:sanctum');
+    Route::post('/users', [UserController::class, 'store'])
+        ->middleware(['auth:sanctum', 'role:admin']);
 
     Route::get('/mpesa/token', [MpesaController::class, 'token']);
-
 });
