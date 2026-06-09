@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Sale;
 use App\Services\SaleService;
 use Illuminate\Http\Request;
+use App\Services\AuditService;
 
 class SaleController extends Controller
 {
@@ -44,13 +45,23 @@ class SaleController extends Controller
         return response()->json($sale->load('items.product'), 200);
     }
     public function receipt(Sale $sale)
-{
+{    
+    AuditService::log(
+        auth()->id(),
+        'receipt.generated',
+        "Generated receipt {$sale->invoice_number}",
+        [
+            'sale_id' => $sale->id,
+            'invoice_number' => $sale->invoice_number,
+        ]
+    );
+
     $sale->load('items.product');
 
     return response()->json([
         'business' => [
             'name' => 'Kaura Hardware',
-            'address' => '  Busia, Kenya',
+            'address' => 'Busia, Kenya',
             'phone' => '+254 715 698 160',
         ],
 
