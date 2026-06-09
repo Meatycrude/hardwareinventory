@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use App\Services\AuditService;
 
 class AutheticationController extends Controller
 {
@@ -31,6 +32,15 @@ class AutheticationController extends Controller
             'two_factor_code' => $code,
             'two_factor_expires_at' => now()->addMinutes(10),
         ]);
+        AuditService::log(
+            $user->id,
+            'user.logged_in',
+            "User {$user->email} logged in",
+            [
+                'user_id' => $user->id,
+                'email' => $user->email,
+            ]
+        );
 
         Mail::to($user->email)->send(new TwoFactorCodeMail($code));
 
@@ -85,6 +95,15 @@ class AutheticationController extends Controller
             'two_factor_code' => null,
             'two_factor_expires_at' => null,
         ]);
+        AuditService::log(
+            $user->id,
+            '2fa.verified',
+            "Two-factor authentication verified for {$user->email}",
+            [
+                'user_id' => $user->id,
+                'email' => $user->email,
+            ]
+        );
 
         $accessToken = $user->createToken(
             config('auth.token_name'),
@@ -98,20 +117,22 @@ class AutheticationController extends Controller
             'user' => $user,
         ]);
     }
+   public function destroy(Request $request)
+{
+    $user = $request->user();
+       
+    AuditService::log(
+        $user->id,
+        'user.logged_out',
+        "User {$user->email} logged out",
+        [
+            'user_id' => $user->id,
+            'email' => $user->email,
+        ]
+    );
 
-    public function destroy(Request $request)
-    {
-        /** @var User $user */
-        $user = $request->user();
+    $user->tokens()->delete();
 
-        // For database tokens, delete the token record
-        if ($user->currentAccessToken() && method_exists($user->currentAccessToken(), 'delete')) {
-            $user->currentAccessToken()->delete();
-        } else {
-            // For stateless tokens, revoke all tokens for this user
-            $user->tokens()->delete();
-        }
-
-        return response()->noContent();
-    }
+    return response()->noContent();
+}
 }
