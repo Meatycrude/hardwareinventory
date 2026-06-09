@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\Sale;
 use App\Models\StockMovement;
 use Illuminate\Support\Facades\DB;
+use App\Services\AuditService;
 
 class SaleService
 {
@@ -50,6 +51,18 @@ class SaleService
             }
 
             $sale->update(['total_amount' => $totalAmount]);
+
+            AuditService::log(
+            auth()->id(),
+            'sale.created',
+            "Created sale {$sale->invoice_number}",
+            [
+                'sale_id' => $sale->id,
+                'invoice_number' => $sale->invoice_number,
+                'total_amount' => $sale->total_amount,
+                'payment_method' => $sale->payment_method,
+            ]
+        );
 
             return $sale->load('items.product');
         });

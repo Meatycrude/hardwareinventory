@@ -6,26 +6,21 @@ use App\Models\Product;
 use App\Models\StockMovement;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends Factory<StockMovement>
- */
 class StockMovementFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+    protected $model = StockMovement::class;
+
     public function definition(): array
     {
         return [
-            'id' => $this->faker->randomNumber(),
             'product_id' => Product::factory(),
-            'type' => $this->faker->randomElement(['purchase', 'sale', 'damaged', 'returned', 'adjustment']),
-            'quantity' => $this->faker->randomNumber(),
+            'type' => $this->faker->randomElement([
+                'purchase',
+                'sale',
+            ]),
+            'quantity' => $this->faker->numberBetween(1, 100),
             'reference' => $this->faker->word(),
             'notes' => $this->faker->sentence(),
-
         ];
     }
 }

@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\SaleController;
 use App\Http\Controllers\Api\StockMovementController;
 use App\Http\Controllers\Api\SupplierController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\AuditLogController;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -87,4 +88,10 @@ Route::name('api.')->group(function () {
         ->middleware(['auth:sanctum', 'role:admin']);
 
     Route::get('/mpesa/token', [MpesaController::class, 'token']);
+
+    Route::get('/audit-logs', [AuditLogController::class, 'index'])
+    ->middleware(['auth:sanctum', 'role:admin']);
+
+    Route::get('/dashboard/recent-activity', [DashboardController::class, 'recentActivity'])
+    ->middleware(['auth:sanctum', 'role:admin']);
 });
