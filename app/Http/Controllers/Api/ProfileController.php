@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use App\Services\AuditService;
 
 class ProfileController extends Controller
 {
@@ -31,6 +32,16 @@ class ProfileController extends Controller
         ]);
 
         $user = $request->user();
+
+            AuditService::log(
+        $user->id,
+        'password.changed',
+        "User {$user->email} changed password",
+        [
+            'user_id' => $user->id,
+            'email' => $user->email,
+        ]
+    );
 
         if (! Hash::check(
             $validated['current_password'],
