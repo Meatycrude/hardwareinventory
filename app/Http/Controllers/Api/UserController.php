@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Http\Request;
 use App\Services\AuditService;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
@@ -62,15 +62,15 @@ class UserController extends Controller
             'role' => $validated['role'],
         ]);
         AuditService::log(
-        auth()->id(),
-        'user.created',
-        "Created user {$user->email}",
-        [
-            'created_user_id' => $user->id,
-            'created_user_email' => $user->email,
-            'role' => $user->role,
-        ]
-    );
+            auth()->id(),
+            'user.created',
+            "Created user {$user->email}",
+            [
+                'created_user_id' => $user->id,
+                'created_user_email' => $user->email,
+                'role' => $user->role,
+            ]
+        );
 
         return response()->json(
             $user,
