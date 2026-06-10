@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Sale;
 use App\Services\SaleService;
 use Illuminate\Http\Request;
+use App\Services\VoidSaleService;
+use Exception;
 use App\Services\AuditService;
 
 class SaleController extends Controller
@@ -82,5 +84,17 @@ class SaleController extends Controller
             })->values(),
         ],
     ]);
+}
+public function void(Sale $sale, VoidSaleService $voidSaleService)
+{
+    try {
+        $voidedSale = $voidSaleService->void($sale);
+
+        return response()->json($voidedSale, 200);
+    } catch (Exception $exception) {
+        return response()->json([
+            'message' => $exception->getMessage(),
+        ], 422);
+    }
 }
 }
