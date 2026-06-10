@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AuditLogController;
 use App\Http\Controllers\Api\AutheticationController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\DashboardController;
@@ -10,7 +11,6 @@ use App\Http\Controllers\Api\SaleController;
 use App\Http\Controllers\Api\StockMovementController;
 use App\Http\Controllers\Api\SupplierController;
 use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\Api\AuditLogController;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -39,12 +39,12 @@ Route::name('api.')->group(function () {
     Route::put('/products/{product}', [ProductController::class, 'update']);
 
     Route::post('/products/{product}/restock', [ProductController::class, 'restock'])
-    ->middleware(['auth:sanctum', 'role:admin,storekeeper']);
+        ->middleware(['auth:sanctum', 'role:admin,storekeeper']);
 
     Route::delete('/products/{product}', [ProductController::class, 'destroy']);
 
     Route::post('/sales', [SaleController::class, 'store'])
-    ->middleware(['auth:sanctum', 'role:admin,cashier']);
+        ->middleware(['auth:sanctum', 'role:admin,cashier']);
 
     Route::get('/sales', [SaleController::class, 'index']);
 
@@ -53,7 +53,7 @@ Route::name('api.')->group(function () {
     Route::get('/sales/{sale}/receipt', [SaleController::class, 'receipt']);
 
     Route::post('/sales/{sale}/void', [SaleController::class, 'void'])
-    ->middleware(['auth:sanctum', 'role:admin,cashier']);
+        ->middleware(['auth:sanctum', 'role:admin,cashier']);
 
     Route::post('/categories', [CategoryController::class, 'store']);
 
@@ -72,7 +72,7 @@ Route::name('api.')->group(function () {
     Route::delete('/suppliers/{supplier}', [SupplierController::class, 'destroy']);
 
     Route::get('/stock-movements', [StockMovementController::class, 'index'])
-    ->middleware(['auth:sanctum', 'role:admin,storekeeper']);
+        ->middleware(['auth:sanctum', 'role:admin,storekeeper']);
 
     Route::get('/products/{product}/movements', [StockMovementController::class, 'productMovements']);
 
@@ -93,11 +93,9 @@ Route::name('api.')->group(function () {
     Route::get('/mpesa/token', [MpesaController::class, 'token']);
 
     Route::get('/audit-logs', [AuditLogController::class, 'index'])
-    ->middleware(['auth:sanctum', 'role:admin']);
+        ->middleware(['auth:sanctum', 'role:admin']);
 
     Route::get('/dashboard/recent-activity', [DashboardController::class, 'recentActivity'])
-    ->middleware(['auth:sanctum', 'role:admin']);
-      
-
+        ->middleware(['auth:sanctum', 'role:admin']);
 
 });

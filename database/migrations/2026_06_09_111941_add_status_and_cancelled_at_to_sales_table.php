@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('sales', function (Blueprint $table) {
-    $table->string('status')->default('completed')->after('payment_method');
-    $table->timestamp('cancelled_at')->nullable()->after('status');
-});
+            $table->string('status')->default('completed')->after('payment_method');
+            $table->timestamp('cancelled_at')->nullable()->after('status');
+        });
     }
 
     /**
