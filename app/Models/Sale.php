@@ -16,11 +16,14 @@ class Sale extends Model
         'invoice_number',
         'total_amount',
         'payment_method',
+        'status',
+        'cancelled_at',
         'user_id',
     ];
 
     protected $casts = [
         'total_amount' => 'decimal:2',
+        'cancelled_at' => 'datetime',
     ];
 
     public function items(): HasMany
