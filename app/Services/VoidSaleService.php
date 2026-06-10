@@ -6,7 +6,6 @@ use App\Models\Sale;
 use App\Models\StockMovement;
 use Exception;
 use Illuminate\Support\Facades\DB;
-use App\Services\AuditService;
 
 class VoidSaleService
 {
