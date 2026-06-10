@@ -54,24 +54,25 @@ class DashboardApiTest extends TestCase
             'total_suppliers' => 2,
         ]);
     }
+
     public function test_dashboard_excludes_cancelled_sales_from_revenue(): void
-{
-    \App\Models\Sale::factory()->create([
-        'status' => 'completed',
-        'total_amount' => 1000,
-    ]);
+    {
+        Sale::factory()->create([
+            'status' => 'completed',
+            'total_amount' => 1000,
+        ]);
 
-    \App\Models\Sale::factory()->create([
-        'status' => 'cancelled',
-        'total_amount' => 500,
-    ]);
+        Sale::factory()->create([
+            'status' => 'cancelled',
+            'total_amount' => 500,
+        ]);
 
-    $response = $this->getJson('/api/dashboard');
+        $response = $this->getJson('/api/dashboard');
 
-    $response->assertOk();
+        $response->assertOk();
 
-    $response->assertJson([
-        'total_sales' => 1000,
-    ]);
-}
+        $response->assertJson([
+            'total_sales' => 1000,
+        ]);
+    }
 }
