@@ -17,15 +17,15 @@ class DashboardController extends Controller
 
             'total_products' => Product::count(),
 
+            'cancelled_sales' => Sale::where('status', 'cancelled')->count(),
+
             'total_categories' => Category::count(),
 
             'total_suppliers' => Supplier::count(),
 
-            'total_sales' => Sale::sum(
-                'total_amount'
-            ),
+            'total_sales' => Sale::where('status', 'completed')->sum('total_amount'),
 
-            'today_sales' => Sale::whereDate(
+            'today_sales' => Sale::where('status', 'completed')->whereDate(
                 'created_at',
                 today()
             )->sum('total_amount'),
