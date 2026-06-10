@@ -6,10 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Mail\TwoFactorCodeMail;
 use App\Models\User;
+use App\Services\AuditService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
-use App\Services\AuditService;
 
 class AutheticationController extends Controller
 {
@@ -117,22 +117,23 @@ class AutheticationController extends Controller
             'user' => $user,
         ]);
     }
-   public function destroy(Request $request)
-{
-    $user = $request->user();
-       
-    AuditService::log(
-        $user->id,
-        'user.logged_out',
-        "User {$user->email} logged out",
-        [
-            'user_id' => $user->id,
-            'email' => $user->email,
-        ]
-    );
 
-    $user->tokens()->delete();
+    public function destroy(Request $request)
+    {
+        $user = $request->user();
 
-    return response()->noContent();
-}
+        AuditService::log(
+            $user->id,
+            'user.logged_out',
+            "User {$user->email} logged out",
+            [
+                'user_id' => $user->id,
+                'email' => $user->email,
+            ]
+        );
+
+        $user->tokens()->delete();
+
+        return response()->noContent();
+    }
 }

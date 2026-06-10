@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\AuditLog;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Sale;
 use App\Models\Supplier;
-use App\Models\AuditLog;
 
 class DashboardController extends Controller
 {
@@ -37,15 +37,14 @@ class DashboardController extends Controller
             )->count(),
         ]);
     }
-  
 
-public function recentActivity()
-{
-    return response()->json(
-        AuditLog::with('user')
-            ->latest()
-            ->take(8)
-            ->get()
-    );
-}
+    public function recentActivity()
+    {
+        return response()->json(
+            AuditLog::with('user')
+                ->latest()
+                ->take(8)
+                ->get()
+        );
+    }
 }

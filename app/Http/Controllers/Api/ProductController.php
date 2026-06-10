@@ -27,7 +27,7 @@ class ProductController extends Controller
             'description' => 'nullable|string',
         ]);
 
-        $validated['sku'] = 'PROD-' . strtoupper(Str::random(8));
+        $validated['sku'] = 'PROD-'.strtoupper(Str::random(8));
 
         $product = Product::create($validated);
 
@@ -63,7 +63,7 @@ class ProductController extends Controller
     public function update(Request $request, Product $product)
     {
         $validated = $request->validate([
-            'sku' => 'required|unique:products,sku,' . $product->id,
+            'sku' => 'required|unique:products,sku,'.$product->id,
             'name' => 'required|string',
             'stock_quantity' => 'required|integer|min:0',
         ]);
