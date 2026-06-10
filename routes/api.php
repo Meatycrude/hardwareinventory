@@ -52,6 +52,9 @@ Route::name('api.')->group(function () {
 
     Route::get('/sales/{sale}/receipt', [SaleController::class, 'receipt']);
 
+    Route::post('/sales/{sale}/void', [SaleController::class, 'void'])
+    ->middleware(['auth:sanctum', 'role:admin,cashier']);
+
     Route::post('/categories', [CategoryController::class, 'store']);
 
     Route::get('/categories', [CategoryController::class, 'index']);
@@ -94,4 +97,7 @@ Route::name('api.')->group(function () {
 
     Route::get('/dashboard/recent-activity', [DashboardController::class, 'recentActivity'])
     ->middleware(['auth:sanctum', 'role:admin']);
+      
+
+
 });
