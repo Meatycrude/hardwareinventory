@@ -5,6 +5,7 @@ namespace Tests\Feature\Services;
 use App\Models\Product;
 use App\Models\Sale;
 use App\Models\SaleItem;
+use App\Models\User;
 use App\Services\VoidSaleService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -19,7 +20,7 @@ class VoidSaleServiceTest extends TestCase
             'status' => 'completed',
         ]);
 
-        $service = new VoidSaleService();
+        $service = new VoidSaleService;
 
         $voidedSale = $service->void($sale);
 
@@ -43,7 +44,7 @@ class VoidSaleServiceTest extends TestCase
             'quantity' => 2,
         ]);
 
-        $service = new VoidSaleService();
+        $service = new VoidSaleService;
 
         $service->void($sale);
 
@@ -69,7 +70,7 @@ class VoidSaleServiceTest extends TestCase
             'quantity' => 2,
         ]);
 
-        $service = new VoidSaleService();
+        $service = new VoidSaleService;
 
         $service->void($sale);
 
@@ -90,39 +91,40 @@ class VoidSaleServiceTest extends TestCase
             'cancelled_at' => now(),
         ]);
 
-        $service = new VoidSaleService();
+        $service = new VoidSaleService;
 
         $service->void($sale);
     }
+
     public function test_voiding_sale_creates_audit_log(): void
-{
-    $user = \App\Models\User::factory()->create([
-        'role' => 'admin',
-    ]);
+    {
+        $user = User::factory()->create([
+            'role' => 'admin',
+        ]);
 
-    $this->actingAs($user, 'sanctum');
+        $this->actingAs($user, 'sanctum');
 
-    $product = Product::factory()->create([
-        'stock_quantity' => 8,
-    ]);
+        $product = Product::factory()->create([
+            'stock_quantity' => 8,
+        ]);
 
-    $sale = Sale::factory()->create([
-        'status' => 'completed',
-    ]);
+        $sale = Sale::factory()->create([
+            'status' => 'completed',
+        ]);
 
-    SaleItem::factory()->create([
-        'sale_id' => $sale->id,
-        'product_id' => $product->id,
-        'quantity' => 2,
-    ]);
+        SaleItem::factory()->create([
+            'sale_id' => $sale->id,
+            'product_id' => $product->id,
+            'quantity' => 2,
+        ]);
 
-    $service = new VoidSaleService();
+        $service = new VoidSaleService;
 
-    $service->void($sale);
+        $service->void($sale);
 
-    $this->assertDatabaseHas('audit_logs', [
-        'user_id' => $user->id,
-        'action' => 'sale.cancelled',
-    ]);
-}
+        $this->assertDatabaseHas('audit_logs', [
+            'user_id' => $user->id,
+            'action' => 'sale.cancelled',
+        ]);
+    }
 }
