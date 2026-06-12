@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Sale;
 use App\Models\Supplier;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -47,4 +48,16 @@ class DashboardController extends Controller
                 ->get()
         );
     }
+    public function salesTrend()
+{
+    $sales = Sale::query()
+        ->selectRaw('DATE(created_at) as date, SUM(total_amount) as revenue')
+        ->where('status', 'completed')
+        ->whereDate('created_at', '>=', now()->subDays(6))
+        ->groupBy(DB::raw('DATE(created_at)'))
+        ->orderBy('date')
+        ->get();
+
+    return response()->json($sales);
+}
 }
