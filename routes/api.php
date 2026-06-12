@@ -78,6 +78,8 @@ Route::name('api.')->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index']);
 
+    Route::get('/dashboard/sales-trend', [DashboardController::class, 'salesTrend']);
+
     Route::get('/profile', [ProfileController::class, 'show'])
         ->middleware('auth:sanctum');
 
